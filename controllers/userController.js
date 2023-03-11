@@ -61,13 +61,13 @@ const loginUser = async (req, res) => {
 
     // check password
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (passwordMatch) {
+    if (!passwordMatch) {
       return res.status(400).json("Password does not match!");
     }
 
     const token = createToken(user._id);
 
-    res.status(200).json(...user, token);
+    res.status(200).json({ id: user._id, name: user.name, email, password: user.password, token });
   } catch (err) {
     res.status(500).json(err);
   }
